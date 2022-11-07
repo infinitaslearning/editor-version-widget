@@ -1,12 +1,16 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import './index.css';
+
+import { getTheme, vanillaTokens } from '@infinitaslearning/pixel-design-system';
+import { ThemeProvider } from '@mui/material/styles';
+
 import App from './App';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-
-root.render(
-  <React.StrictMode>
+const EditorWidget = () => (
+  <ThemeProvider theme={getTheme(vanillaTokens)}>
     <App />
-  </React.StrictMode>,
+  </ThemeProvider>
 );
+
+ReactDOM.render(<EditorWidget />, document.getElementById('root'));
