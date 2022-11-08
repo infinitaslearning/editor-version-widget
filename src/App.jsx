@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from 'react';
 
 import { PlayerEditor } from '@infinitas/module-player-editor';
@@ -41,10 +42,14 @@ const previewer = {
 };
 
 const App = () => (
-  <div className="App">
-    <header className="App-header">
-      <PlayerEditor particle={particle} previewer={previewer} previewMode={false} />
-    </header>
+  <div style={{ display: 'flex' }}>
+    <PlayerEditor
+      particle={particle}
+      previewer={previewer}
+      previewMode={false}
+      // onEdit={(isEdited, editorState) => console.log('onEdit', isEdited, editorState)}
+      onPatches={patches => console.log('patches: ', patches)}
+    />
   </div>
 );
 
