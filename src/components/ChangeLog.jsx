@@ -1,5 +1,6 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable no-console */
+/* eslint-disable no-underscore-dangle */
 
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
@@ -16,6 +17,7 @@ import HistoryIcon from '@mui/icons-material/History';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import LoopIcon from '@mui/icons-material/Loop';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import { green, blue, red } from '@mui/material/colors';
 
 const drawerWidth = 400;
 
@@ -58,7 +60,6 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 const ChangeLog = ({ open, setOpen, patches, onClick }) => {
-    // const theme = useTheme();
     const patchesReverse = [...patches].reverse();
 
     return (
@@ -94,29 +95,31 @@ const ChangeLog = ({ open, setOpen, patches, onClick }) => {
                       mr: open ? 3 : 'auto',
                       justifyContent: 'center' }}
                   >
-                    {patch.op === 'add' && <AddCircleOutlineIcon fontSize="large" />}
-                    {patch.op === 'replace' && <LoopIcon fontSize="large" />}
-                    {patch.op === 'remove' && <RemoveCircleOutlineIcon fontSize="large" />}
+                    {patch.op === 'add' && <AddCircleOutlineIcon fontSize="large" sx={{ color: green[600] }} />}
+                    {patch.op === 'replace' && <LoopIcon fontSize="large" sx={{ color: blue[700] }} />}
+                    {patch.op === 'remove' && <RemoveCircleOutlineIcon fontSize="large" sx={{ color: red[600] }} />}
                   </ListItemIcon>
                   <ListItemText
                     sx={{ opacity: open ? 1 : 0 }}
                     primary={<Typography variant="h6">Modification # {patches.length - index}</Typography>}
                     secondary={(
                       <>
-                        <Typography variant="h6">Op: {patch.op}</Typography>
-                        <Typography paragraph variant="subtitle1">Path: {patch.path}</Typography>
+                        <Typography>Operation: {patch.op}</Typography>
+                        <Typography>Path: {patch.path}</Typography>
                         {patch.op === 'replace' && (
-                          <Typography paragraph>
+                          <Typography>
                             Modified Text: {patch.value[0].text}
                           </Typography>
                         )}
                         {patch.op === 'add' && (
-                          <Typography paragraph>
+                          <>
+                            <Typography>Id: {patch.value._id}</Typography>
+                            <Typography>Type: {patch.value._type}</Typography>
                             {(patch.value?.children && patch.value?.children[0]?.text) ? (
-                              <Typography paragraph>ModifiedText:  {patch.value?.children[0]?.text}</Typography>) : null}
+                              <Typography>ModifiedText:  {patch.value?.children[0]?.text}</Typography>) : null}
                             {(patch.value?.answer && patch.value?.answer[0]?.children[0]?.text) ? (
-                              <Typography paragraph>ModifiedText:  {patch.value?.answer[0]?.children[0]?.text}</Typography>) : null}
-                          </Typography>
+                              <Typography>ModifiedText:  {patch.value?.answer[0]?.children[0]?.text}</Typography>) : null}
+                          </>
                         )}
                       </>
                   )}
