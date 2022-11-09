@@ -1,11 +1,13 @@
+/* eslint-disable linebreak-style */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-console */
 import React, { useCallback, useState } from 'react';
 import * as jsonpatch from 'fast-json-patch';
 
-import PatchesList from './components/PatchesList';
+// import PatchesList from './components/PatchesList';
 import Player from './components/Player';
+import ChangeLog from './components/ChangeLog';
 import particle from './particle';
 
 const deleteLastIndexOfPath = path => {
@@ -22,6 +24,7 @@ const splitPathByLastIndex = path => {
 
 const App = () => {
   const [allPatches, setAllPatches] = useState([]);
+  const [open, setOpen] = useState(false);
 
   const handlePatches = useCallback(patches => setAllPatches(prev => [...prev, ...patches]), []);
 
@@ -52,7 +55,8 @@ const App = () => {
   return (
     <div style={{ display: 'flex' }}>
       <Player onChange={handlePatches} />
-      <PatchesList patches={allPatches} onClick={handleClick} />
+      {/* <PatchesList patches={allPatches} onClick={handleClick} /> */}
+      <ChangeLog open={open} setOpen={setOpen} patches={allPatches} onClick={handleClick} />
     </div>
   );
 };
