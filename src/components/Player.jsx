@@ -1,7 +1,7 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { PlayerEditor } from '@infinitas/module-player-editor';
 import { PlayerWrapper } from '@infinitas/app-player';
-import particle from '../particle';
 
 const previewerConfig = {
   superSubmitButton: null,
@@ -22,14 +22,15 @@ const previewer = {
   config: previewerConfig,
 };
 
-const Player = ({ onChange }) => (
+const Player = ({ onChange, ...props }) => (
   <div style={{ display: 'flex' }}>
     <PlayerEditor
-      particle={particle}
+      // particle={particle}
       previewer={previewer}
       previewMode={false}
-      // onEdit={(isEdited, editorState) => console.log('onEdit', isEdited, editorState)}
+      // onEdit={onChange}
       onCurrentPatches={onChange}
+      {...props}
     />
   </div>
   );

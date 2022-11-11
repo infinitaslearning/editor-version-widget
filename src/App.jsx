@@ -24,37 +24,34 @@ const splitPathByLastIndex = path => {
 
 const App = () => {
   const [allPatches, setAllPatches] = useState([]);
-  const [open, setOpen] = useState(false);
+  const [isCompare, setIsCompare] = useState(false);
+  const [newParticle, setNewParticle] = useState(particle);
+  const [oldParticle, setOldParticle] = useState(particle);
+  const [open, setOpen] = useState(true);
 
-  const handlePatches = useCallback(patches => setAllPatches(prev => [...prev, ...patches]), []);
-
-  const getContent = ({ editorState, path }) => jsonpatch.getValueByPointer(editorState, path);
-
-  const buildState = patches => {
-    console.log(patches, particle);
-    return jsonpatch.deepClone(jsonpatch.applyPatch(particle, patches).newDocument);
-};
+  const handlePatches = useCallback(patches => {
+    // patches.currentPatches[0]?.value?.children?.[0].text
+    // patches.currentPatches[0]?.op !== 'add'
+    if (patches.currentPatches.length) { setAllPatches(prev => [...prev, jsonpatch.deepClone(patches)]); }
+}, []);
 
   const handleClick = (patch, idx) => {
-    if (patch.op === 'add') {
-      document.getElementById(patch.value._id).style.border = '1px solid green';
-    }
-    if (patch.op === 'replace') {
-      const patchesRange = allPatches.slice(0, idx + 1);
-      const editorState = buildState(patchesRange);
-      console.log('editorState', editorState);
-      console.log(patch.path, deleteLastIndexOfPath(patch.path));
-      const path = deleteLastIndexOfPath(patch.path);
-      const content = getContent({ editorState, path: deleteLastIndexOfPath(patch.path) });
-      const [_, index] = splitPathByLastIndex(path);
-      console.log('content', content);
-      document.getElementById(content._id).children[index].style.border = '1px solid blue';
+    if (idx === allPatches.length - 1) {
+      setIsCompare(false);
+    } else if (allPatches.length > 1) {
+      console.log('----------------');
+      console.log('idx', idx);
+      console.log('NEW', allPatches[idx].editorState);
+      console.log('OLD', allPatches[idx + 1].editorState);
+      setIsCompare(true);
+      setNewParticle(allPatches[idx].editorState);
+      setOldParticle(allPatches[idx + 1].editorState);
     }
   };
 
   return (
     <div style={{ display: 'flex' }}>
-      <Player onChange={handlePatches} />
+      <Player onChange={handlePatches} isCompare={isCompare} oldParticle={oldParticle} newParticle={newParticle} />
       {/* <PatchesList patches={allPatches} onClick={handleClick} /> */}
       <ChangeLog open={open} setOpen={setOpen} patches={allPatches} onClick={handleClick} />
     </div>
